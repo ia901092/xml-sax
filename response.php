@@ -30,3 +30,69 @@ if (isset($_GET['paper']) && $_GET['paper'] !== "") {
 
 $url = "https://wwwlab.webug.se/examples/XML/articleservice/articles/?paper=" . $paper;
 $data = file_get_contents($url);
+$previous = "";
+$newspaperAttrs = array();
+$articles = array();
+$currentArticle = -1;
+
+function getAttr($attrs, $key) {
+    foreach ($attrs as $k => $v) {
+        if (strtolower($k) == strtolower($key)) {
+            return $v;
+        }
+    }
+    return "";
+}
+
+function start($parser, $name, $attrs) {
+    global $newspaperAttrs, $articles, $currentArticle, $previous;
+    $name = strtoupper($name);
+
+    if ($name == "NEWSPAPER") {
+        $newspaperAttrs = $attrs;
+    }
+    if ($name == "ARTICLE") {
+        $currentArticle++;
+        $articles[$currentArticle] = array(
+            'attrs' => $attrs,
+            'heading' => '',
+            'texts' => array()
+        );
+    }
+
+    $previous = $name;
+}
+
+function stop($parser, $name) {
+    global $previous;
+    $previous = "";
+}
+
+function text($parser, $data) {
+    global $articles, $currentArticle, $previous;
+
+    if ($previous == "COMMENT") {
+        return;
+    }
+    if ($currentArticle < 0) {
+        return;
+    }
+
+    $data = trim($data);
+    if ($data === "") {
+        return;
+    }
+
+    if ($previous == "HEADING") {
+        $articles[$currentArticle]['heading'] .= $data;
+    } elseif ($previous == "TEXT") {
+        $articles[$currentArticle]['texts'][] = $data;
+    }
+}
+
+$parser = xml_parser_create();
+xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 1);
+xml_set_element_handler($parser, "start", "stop");
+xml_set_character_data_handler($parser, "text");
+xml_parse($parser, $data, true);
+xml_parser_free($parser);
