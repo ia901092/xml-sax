@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Form</title>
+    <style>
+body {
+    background-color: #f0f0f0;
+    font-family: Verdana, sans-serif;
+}
+    </style>
 </head>
 <body>
 
@@ -141,6 +147,10 @@ echo "            </td>\n";
 echo "        </tr>\n";
 echo "    </tbody>\n";
 echo "</table>\n";
+body {
+    background-color: #f0f0f0;
+    font-family: Verdana, sans-serif;
+}
 table.outer {
     border: 2px solid #5a3e2b;
     border-collapse: collapse;
