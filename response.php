@@ -96,3 +96,48 @@ xml_set_element_handler($parser, "start", "stop");
 xml_set_character_data_handler($parser, "text");
 xml_parse($parser, $data, true);
 xml_parser_free($parser);
+echo "<table class=\"outer\">\n";
+echo "    <tbody>\n";
+echo "        <tr>\n";
+echo "            <td>";
+echo "Edition: " . htmlspecialchars(getAttr($newspaperAttrs, "edition"));
+echo " | Subscribers: " . htmlspecialchars(getAttr($newspaperAttrs, "subscribers"));
+echo "</td>\n";
+echo "        </tr>\n";
+echo "        <tr>\n";
+echo "            <td>\n";
+echo "                <table class=\"inner\">\n";
+echo "                    <tbody>\n";
+
+echo "                        <tr>\n";
+foreach ($articles as $a) {
+    $class = htmlspecialchars(strtolower(getAttr($a['attrs'], "type")));
+    echo "                            <td class=\"" . $class . "\">";
+    echo "Id: " . htmlspecialchars(getAttr($a['attrs'], "id")) . "<br>";
+    echo "Date: " . htmlspecialchars(getAttr($a['attrs'], "date")) . "<br>";
+    echo "Type: " . htmlspecialchars(getAttr($a['attrs'], "type"));
+    echo "</td>\n";
+}
+echo "                        </tr>\n";
+
+echo "                        <tr>\n";
+foreach ($articles as $a) {
+    $class = htmlspecialchars(strtolower(getAttr($a['attrs'], "type")));
+    echo "                            <td class=\"" . $class . "\">\n";
+    echo "                                <div class=\"story\">\n";
+    if ($a['heading'] !== "") {
+        echo "                                    <h3>" . htmlspecialchars($a['heading']) . "</h3>\n";
+    }
+    foreach ($a['texts'] as $t) {
+        echo "                                    <p>" . htmlspecialchars($t) . "</p>\n";
+    }
+    echo "                                </div>\n";
+    echo "                            </td>\n";
+}
+echo "                        </tr>\n";
+echo "                    </tbody>\n";
+echo "                </table>\n";
+echo "            </td>\n";
+echo "        </tr>\n";
+echo "    </tbody>\n";
+echo "</table>\n";
