@@ -141,3 +141,44 @@ echo "            </td>\n";
 echo "        </tr>\n";
 echo "    </tbody>\n";
 echo "</table>\n";
+table.outer {
+    border: 2px solid #5a3e2b;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #f5e6d3;
+}
+table.outer > tbody > tr > td {
+    border: 1px solid #5a3e2b;
+    padding: 10px;
+    vertical-align: top;
+}
+table.inner {
+    border: 1px solid #5a3e2b;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: #fffdf8;
+}
+table.inner > tbody > tr > td {
+    border: 1px solid #5a3e2b;
+    padding: 8px;
+    vertical-align: top;
+}
+td.news { background-color: #dff0d8; }
+td.review { background-color: #fdf2d0; }
+.story p {
+    border-left: 4px solid #5a3e2b;
+    padding: 6px 10px;
+    margin: 6px 0;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 5px #ccc;
+}
+h3 {
+    font-family: "Courier New", monospace;
+    font-size: 16px;
+    font-weight: bold;
+}
+p {
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    font-weight: normal;
+}
