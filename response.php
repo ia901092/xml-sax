@@ -69,16 +69,6 @@ $newspaperAttrs = array();
 $articles = array();
 $currentArticle = -1;
 
-// hitta attribut oavsett case
-function getAttr($attrs, $key) {
-    foreach ($attrs as $k => $v) {
-        if (strtolower($k) == strtolower($key)) {
-            return $v;
-        }
-    }
-    return "";
-}
-
 function start($parser, $name, $attrs) {
     global $newspaperAttrs, $articles, $currentArticle, $previous;
     $name = strtoupper($name);
@@ -138,12 +128,13 @@ xml_parser_free($parser);
 echo "<table class=\"outer\">\n";
 echo "    <tbody>\n";
 
-// rad 1: newspaper attribut (explicit)
+// rad 1: newspaper attribut (iterate)
 echo "        <tr>\n";
-echo "            <td>";
-echo "Edition: " . htmlspecialchars(getAttr($newspaperAttrs, "edition"));
-echo " | Subscribers: " . htmlspecialchars(getAttr($newspaperAttrs, "subscribers"));
-echo "</td>\n";
+echo "            <td>\n";
+foreach ($newspaperAttrs as $key => $value) {
+    echo "                " . htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>\n";
+}
+echo "            </td>\n";
 echo "        </tr>\n";
 
 // rad 2: inre tabell inuti yttre (nestled tables)
@@ -152,23 +143,18 @@ echo "            <td>\n";
 echo "                <table class=\"inner\">\n";
 echo "                    <tbody>\n";
 
-// inre rad 1: article attribut (explicit) - en kolumn per artikel
-echo "                        <tr>\n";
+// row layout - en rad per artikel
 foreach ($articles as $a) {
-    $class = htmlspecialchars(strtolower(getAttr($a['attrs'], "type")));
-    echo "                            <td class=\"" . $class . "\">";
-    echo "Id: " . htmlspecialchars(getAttr($a['attrs'], "id")) . "<br>";
-    echo "Date: " . htmlspecialchars(getAttr($a['attrs'], "date")) . "<br>";
-    echo "Type: " . htmlspecialchars(getAttr($a['attrs'], "type"));
-    echo "</td>\n";
-}
-echo "                        </tr>\n";
-
-// inre rad 2: story - en kolumn per artikel
-echo "                        <tr>\n";
-foreach ($articles as $a) {
-    $class = htmlspecialchars(strtolower(getAttr($a['attrs'], "type")));
+    $class = htmlspecialchars(strtolower($a['attrs']['TYPE']));
+    echo "                        <tr>\n";
     echo "                            <td class=\"" . $class . "\">\n";
+
+    // article attribut (iterate)
+    foreach ($a['attrs'] as $key => $value) {
+        echo "                                " . htmlspecialchars($key) . ": " . htmlspecialchars($value) . "<br>\n";
+    }
+
+    // story
     echo "                                <div class=\"story\">\n";
     if ($a['heading'] !== "") {
         echo "                                    <h3>" . htmlspecialchars($a['heading']) . "</h3>\n";
@@ -177,16 +163,17 @@ foreach ($articles as $a) {
         echo "                                    <p>" . htmlspecialchars($t) . "</p>\n";
     }
     echo "                                </div>\n";
+
     echo "                            </td>\n";
+    echo "                        </tr>\n";
 }
-echo "                        </tr>\n";
 
 echo "                    </tbody>\n";
-echo "                </table>\n"; // stänger inner
+echo "                </table>\n";
 echo "            </td>\n";
 echo "        </tr>\n";
 echo "    </tbody>\n";
-echo "</table>\n"; // stänger outer
+echo "</table>\n";
 ?>
 
 <p><a href="form.php">Tillbaka</a></p>
