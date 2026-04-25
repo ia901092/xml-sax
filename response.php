@@ -54,6 +54,9 @@
 <body>
 
 <?php
+// dölj Notices i produktion
+error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
+
 // default Evening_Edition om inget valts
 if (isset($_GET['paper']) && $_GET['paper'] !== "") {
     $paper = $_GET['paper'];
@@ -145,8 +148,7 @@ echo "                    <tbody>\n";
 
 // row layout - en rad per artikel
 foreach ($articles as $a) {
-    $attrsLower = array_change_key_case($a['attrs'], CASE_LOWER);
-    $class = htmlspecialchars(strtolower($attrsLower['type'] ?? ''));
+    $class = htmlspecialchars(strtolower(@$a['attrs']['TYPE']));
     echo "                        <tr>\n";
     echo "                            <td class=\"" . $class . "\">\n";
 
