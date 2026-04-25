@@ -145,7 +145,8 @@ echo "                    <tbody>\n";
 
 // row layout - en rad per artikel
 foreach ($articles as $a) {
-    $class = htmlspecialchars(strtolower($a['attrs']['TYPE']));
+    $attrsLower = array_change_key_case($a['attrs'], CASE_LOWER);
+    $class = htmlspecialchars(strtolower($attrsLower['type'] ?? ''));
     echo "                        <tr>\n";
     echo "                            <td class=\"" . $class . "\">\n";
 

@@ -11,8 +11,8 @@
 <?php
 $xml = simplexml_load_file("https://wwwlab.webug.se/examples/XML/articleservice/papers/");
 
-foreach ($xml->paper as $p) {
-    echo "        <option value=\"" . $p['type'] . "\">" . $p->name . "</option>\n";
+foreach ($xml->NEWSPAPER as $p) {
+    echo "        <option value=\"" . $p['TYPE'] . "\">" . $p['NAME'] . "</option>\n";
 }
 ?>
     </select>
